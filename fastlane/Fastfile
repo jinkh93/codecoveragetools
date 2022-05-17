@@ -1,0 +1,7 @@
+lane :test do
+    scan(project: "codecoveragetools/codecoveragetools.xcodeproj", code_coverage: true)
+    artifacts = []
+    artifacts << Actions.lane_context[SharedValues::SCAN_GENERATED_XCRESULT_PATH] if Actions.lane_context[SharedValues::SCAN_GENERATED_XCRESULT_PATH]
+    copy_artifacts(artifacts: artifacts, target_path: "test_output")
+    slather(build_directory: Actions.lane_context[SharedValues::SCAN_ZIP_BUILD_PRODUCTS_PATH], proj: "codecoveragetools/codecoveragetools.xcodeproj", scheme: "codecoveragetools", cobertura_xml: true, output_directory: "test_output")
+end

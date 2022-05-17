@@ -1,0 +1,47 @@
+name: Test
+
+on:
+  pull_request:
+    branches: 
+      - '**'
+      - 'main'
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up ruby env
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7.2
+        bundler-cache: true
+    - name: Run tests
+      run: bundle exec fastlane test
+    - name: Upload to codecov
+      uses: codecov/codecov-action@v2
+    - name: Download codeclimate upload tool
+      run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64 > cc-test-reporter && chmod +x cc-test-reporter
+    - name: Generate coverage report
+      run: xcrun xccov view --report --json test_output/*.xcresult > coverage.json
+    - name: Upload coverage report
+      env:
+        CODECLIMATE_TOKEN: ${{ secrets.CODECLIMATE_TOKEN }}
+      run: ./cc-test-reporter after-build -t xccov -r $CODECLIMATE_TOKEN
+    - name: Download xccov2lcov tool
+      uses: actions/checkout@v3
+      with:
+        repository: trax-retail/xccov2lcov
+        path: xccov2lcov
+    - name: Prepare for coveralls
+      run: cd xccov2lcov && swift run xccov2lcov ../coverage.json > ../lcov.info && cd ..
+    - name: Upload to coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: lcov.info
+    - name: Clean up
+      run: rm -rf xccov2lcov && rm cc-test-reporter && rm coverage.json 
