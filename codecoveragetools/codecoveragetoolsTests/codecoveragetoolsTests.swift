@@ -1,11 +1,12 @@
 //
-//  Tests_iOS.swift
-//  Tests iOS
+//  codecoveragetoolsTests.swift
+//  codecoveragetoolsTests
 //
 //  Created by jk on 2022-05-17.
 //
 
 import XCTest
+@testable import codecoveragetools
 
 class NetworkServiceMock: NetworkService {
     let e: XCTestExpectation
@@ -18,15 +19,10 @@ class NetworkServiceMock: NetworkService {
     }
 }
 
-class Tests_iOS: XCTestCase {
+class codecoveragetoolsTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
-        continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
 
     override func tearDownWithError() throws {
@@ -34,22 +30,18 @@ class Tests_iOS: XCTestCase {
     }
 
     func testExample() throws {
-        // UI tests must launch the application that they test.
         let e = expectation(description: "e")
         let mock = NetworkServiceMock(e: e)
         let sut = ContentViewModel(network: mock)
         sut.buttonTapped()
         waitForExpectations(timeout: 1)
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
 
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
+    func testPerformanceExample() throws {
+        // This is an example of a performance test case.
+        self.measure {
+            // Put the code you want to measure the time of here.
         }
     }
+
 }

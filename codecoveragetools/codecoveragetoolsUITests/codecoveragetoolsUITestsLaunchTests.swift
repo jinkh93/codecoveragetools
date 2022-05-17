@@ -1,13 +1,13 @@
 //
-//  Tests_macOSLaunchTests.swift
-//  Tests macOS
+//  codecoveragetoolsUITestsLaunchTests.swift
+//  codecoveragetoolsUITests
 //
 //  Created by jk on 2022-05-17.
 //
 
 import XCTest
 
-class Tests_macOSLaunchTests: XCTestCase {
+class codecoveragetoolsUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
